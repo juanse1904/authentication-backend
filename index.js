@@ -2,6 +2,19 @@ const express = require("express")
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const { MongoClient } = require("mongodb");
+const user = require('./infraestructure/dao/userDao')
+const posts = require('./infraestructure/dao/postsDao')
+
+//invoke to send client db
+const changeLogDao = require("./infraestructure/dao/")
+const userDAO = require("./infraestructure/dao/userDAO")
+const postDAO = require("./infraestructure/dao/postsDao")
+
+
+//invoke routes
+const userRoutes = require('./routes/UserRoutes')
+const postsRoutes = require('./routes/')
+ 
 
 
 if (process.env.NODE_ENV !== "production"){
@@ -20,8 +33,9 @@ MongoClient.connect(
     process.exit(1)
 })
 .then(async client => {
-    await user.injectdb(client);
-    await posts.injectdb(client);
+    await userDAO.injectdb(client);
+    await postDAO.injectdb(client);
+    await changeLogDao.injectdb(client);
     
   
     console.log("connected")
@@ -47,8 +61,8 @@ app.use((req, res, next) => {
   });
 
   //Routes app.use 
- /*  app.use(userRoutes);
-  app.use(postsRoutes); */
+  app.use(userRoutes);
+  app.use(postsRoutes);
 
   app.use(function (req, res, next) {
     res.status(404).send("Sorry, can't find that!");

@@ -18,10 +18,10 @@ exports.injectdb = async (conn) => {
   }
 }
 
-  exports.createNewUserDAO = async (record, user, session) => {
+  exports.createNewUserDAO = async (record,session) => {
     try {
      
-      const result =  await commands.createNewDocument(COLLECTION_NAME_DAO, record, user, session)
+      const result =  await commands.createNewDocument(COLLECTION_NAME_DAO, record, session)
 
       return result 
     } catch (error) {

@@ -5,11 +5,6 @@ const userDAO = require("../infraestructure/dao/userDAO");
 const createUserDTO = require("../infraestructure/Models/adUser/adUserDTO");
 const updateUserDTO = require("../infraestructure/Models/adUser/updateUserDTO"); 
 const getUserDTO = require("../infraestructure/Models/adUser/getUserDTO"); 
-const languageDao = require('../infraestructure/dao/LanguageDao')
-const clientDao = require('../infraestructure/dao/ClientDAO')
-const roleDao = require('../infraestructure/dao/roleDao')
-
-
 
 /**
  * create user
@@ -20,79 +15,20 @@ exports.createUserLocal = async (req, session, transaction) => {
   try {
     const name = req.name;
     const email = req.email;
-    const phonenumber = req.phonenumber;
-    const isactive = req.isactive;
-    const isverified= req.isverified;
-    const language = ObjectId(req._idlanguage);
-    const client = ObjectId(req._idclient);
-    const role = req.role;
-    const user = ObjectId(req._iduser);
+    const password = req.password;
+    const bio = req.bio;
+    const posts=req.posts
+    
 
-    if(!ObjectId.isValid(user)){
-      throw new Error('user is not valid');
+    const exist = await userDAO.getUserDAO({email:email})
+
+    if(exist.data.length>0){
+      throw new Error (`the email ${email} is already in use`)
     }
-
-
-      if((await roleDao.getRoleDAO({client:client})).data.length==0){
-        throw new Error('the client insterted has not a releated roles');
-      }
-
-      let roleclient=[]
-      let modulerole=[]
-
-      function checkForDuplicates(array) {
-        let valuesAlreadySeen = []
-      
-        for (let i = 0; i < array.length; i++) {
-          let value = array[i]
-          if (valuesAlreadySeen.indexOf(value) !== -1) {
-            throw new Error(`the module with id ${value} is asociated with another role`);
-          }
-          valuesAlreadySeen.push(value)
-        }
-        return false
-      }
-      async function  handleRoleClient(clientid){
-        (await roleDao.getRoleDAO({client:clientid})).data.forEach(item =>{
-          /* console.log("this is item", item) */
-          roleclient.push(item._id.toString())
-          
-          console.log("this is role client", roleclient)
-          console.log("this is module role", role)
-        })
-
-        role.forEach(async item =>{
-          item=ObjectId(item)
-          console.log("this is the type of items", typeof item , item)
-          let modulei=(await roleDao.getRoleDAO({_id:item}))
-          modulerole.push((modulei.data[0].module).toString())
-        })
-        
-        if (role.length>0){
-          role.forEach(element => {
-            if(!roleclient.includes(element.toString())){
-              throw new Error(`the role with id ${element} does not releated with the client ${clientid}`);
-            }
-          });
-        }
-        await checkForDuplicates(modulerole)
-      }
-      await handleRoleClient(client)
-      
-
-      if((await languageDao.getLanguageDAO({_id:language})).data.length==0){
-        throw new Error('Language insterted not exist');
-      }
-
-      if(!transaction){
-       
-        if((await clientDao.getClientDAO({_id:client})).data.length==0)
-            throw new Error('Client insterted not exist');
-      }
-      
-    const data = await createUserDTO(name,email,phonenumber,isactive, isverified,language,client,role)
-    console.log("this is role",typeof role[0])
-    return  await userDAO.createNewUserDAO(data, user, session);
+   
+    const data = await createUserDTO(name,email,password, bio, posts)
+    
+    return  await userDAO.createNewUserDAO(data, session);
 
   } catch (error) {
     throw error
