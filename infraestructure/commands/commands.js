@@ -1,10 +1,9 @@
 const { ObjectId} = require("mongodb");
-const changeLogController = require("../../controllers/adChangeLogController");
+const changeLogController = require("../../controllers/adchangelogController");
 
 
 
 let client;
-const USER_COLLECTION = "user"
 const CURRENT_VERSION="1"
 
 /**
