@@ -25,23 +25,6 @@ exports.injectdb = async (conn) => {
     }
   }
 
-/**
- * createOrUpdateValidation: generate created or updated object used to be introduced in some collection
- * @param {ObjectId} user
- * @return {Object} 
- */  
-
-exports.createOrUpdateValidation = async (user) => {
-
-  const userValid = ObjectId.isValid(user);
-    if (!userValid){
-      throw new Error("user id received is not an objectid");
-    }
-  return {
-    user: user,
-    date: new Date()
-  }
-} 
 
 /**
  * createNewDocument: insert new document in a database's collection
@@ -54,19 +37,9 @@ exports.createOrUpdateValidation = async (user) => {
 exports.createNewDocument = async (collectionName, data, user, session) => {
   try {
     let status = false;
-
-    //created data for JSON
-    const created = await this.createOrUpdateValidation(user);
-
-    data.created = created;
+  
     data.schema_version = CURRENT_VERSION;
 
-    //validate if userId received exists
-    var userCollection = client.db(process.env.NAME_DB).collection(USER_COLLECTION);
-    const resultFindUser = await userCollection.findOne({ _id: user });
-    if (resultFindUser === null) {
-      throw new Error("User ID received not exist");
-    };
 
     //insert data into collection received
     
@@ -109,17 +82,6 @@ exports.updateDocument = async (collectionName, idToUpdate, user, data, projecti
 
       let status = false
 
-       //create updated document 
-       const updated = await this.createOrUpdateValidation(user) 
-       data.updated = updated;
-       data.schema_version = "1"
-
-      //validate if userId received exist
-      var userCollection = client.db(process.env.NAME_DB).collection(USER_COLLECTION);
-      const resultFindUser = await userCollection.findOne({ _id: user });
-      if (resultFindUser == null) {
-        throw new Error("User ID received is not valid");
-      }
       
       //update original document with data received. 
       let resultUpdate;
@@ -168,17 +130,6 @@ exports.updateDocument = async (collectionName, idToUpdate, user, data, projecti
   exports.deleteDocument = async (collectionName, idToDelete, user) => {
     try {
 
-      const userValid = ObjectId.isValid(user)
-        if (!userValid){
-        throw new Error("userid received is not an objectid")
-        }
-
-      //validate if userId received exist
-      var userCollection = client.db(process.env.NAME_DB).collection(USER_COLLECTION);
-      const resultFindUser = await userCollection.findOne({ _id: user });
-        if (resultFindUser == null) {
-        throw new Error("User ID received is not valid");
-        }
       
       //validate id received is an objectid
       const idToDeleteValid = ObjectId.isValid(idToDelete)
