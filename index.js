@@ -5,8 +5,8 @@ const { MongoClient } = require("mongodb");
 
 
 //invoke to send client db
-const changeLogDao = require("./infraestructure/dao/")
-const userDAO = require("./infraestructure/dao/userDAO")
+const changeLogDao = require("./infraestructure/dao/changelogDao")
+const userDAO = require("./infraestructure/dao/userDao")
 const postDAO = require("./infraestructure/dao/postsDao")
 
 

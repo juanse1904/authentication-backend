@@ -4,7 +4,7 @@
  POST /smchangeLog 
  */
 
- const adChangeLogDao = require("../infraestructure/dao/ChangeLogDao");
+ const adChangeLogDao = require("../infraestructure/dao/changelogDao");
  const adChangeLogDTO = require("../infraestructure/Models/adChangeLog/adChangeLogDTO");
  
  exports.createADChangeLog = async (type, collection, recordid, oldDocument, newDocument) => {
