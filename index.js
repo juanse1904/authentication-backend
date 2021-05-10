@@ -2,8 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const { MongoClient } = require("mongodb");
-const user = require('./infraestructure/dao/userDao')
-const posts = require('./infraestructure/dao/postsDao')
+
 
 //invoke to send client db
 const changeLogDao = require("./infraestructure/dao/")
