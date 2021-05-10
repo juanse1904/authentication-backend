@@ -1,8 +1,8 @@
-const response = require("./responses/responses");
+const response = require("./responses/respones");
 const { ObjectId } = require("mongodb");
 
-const userDAO = require("../infraestructure/dao/userDAO");
-const createUserDTO = require("../infraestructure/Models/adUser/adUserDTO");
+const userDAO = require("../infraestructure/dao/userDao");
+const createUserDTO = require("../infraestructure/Models/adUser/aduserDTO");
 const updateUserDTO = require("../infraestructure/Models/adUser/updateUserDTO"); 
 const getUserDTO = require("../infraestructure/Models/adUser/getUserDTO"); 
 
@@ -65,8 +65,8 @@ exports.updateUser = async (req, res, next) => {
 
     const idToUpdate = ObjectId(req.query._id);
     const userToUpdate = await userDAO.getUserDAO({_id:idToUpdate})
-    
-    const user=ObjectId(req.body._iduser);
+    const emailToUpdate
+
     
     if(userToUpdate.data.length == 0){
       throw new Error ("id of the user received not exist")

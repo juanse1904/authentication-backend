@@ -32,10 +32,10 @@ MongoClient.connect(
     process.exit(1)
 })
 .then(async client => {
-    await userDAO.injectdb(client);
-    await postDAO.injectdb(client);
     await changeLogDao.injectdb(client);
-    
+    await userDAO.injectdb(client);
+    /* await postDAO.injectdb(client);
+     */
   
     console.log("connected")
     app.listen( process.env.PORT || 8080, () =>{
