@@ -65,9 +65,7 @@ exports.updateUser = async (req, res, next) => {
 
     const idToUpdate = ObjectId(req.query._id);
     const userToUpdate = await userDAO.getUserDAO({_id:idToUpdate})
-    const emailToUpdate
-
-    
+        
     if(userToUpdate.data.length == 0){
       throw new Error ("id of the user received not exist")
     }
@@ -75,39 +73,14 @@ exports.updateUser = async (req, res, next) => {
       const name = req.body.name !== undefined ? req.body.name: userToUpdate.data[0].name
       const email = req.body.email !== undefined ? req.body.email: userToUpdate.data[0].email
       const phonenumber = req.body.phonenumber !== undefined ? req.body.phonenumber : userToUpdate.data[0].phonenumber
-      const isactive = req.body.isactive !== undefined ? req.body.isactive : userToUpdate.data[0].isactive
-      const isverified = req.body.isverified !== undefined ? req.body.isverified : userToUpdate.data[0].isverified
-      const language = req.body._idlanguage !== undefined ? ObjectId(req.body._idlanguage) : userToUpdate.data[0].language
-      const client = req.body._idclient !== undefined ? ObjectId(req.body._idclient) : userToUpdate.data[0].client
-      const role = req.body._idrole !== undefined ? req.body._idrole: userToUpdate.data[0].role
+      const posts = req.body.posts !== undefined ? req.body.posts: userToUpdate.data[0].posts
  
     //verificate if the data to put in the document exist
 
-    const languageToUpdate = await languageDao.getLanguageDAO({_id:language})
-
-    if(languageToUpdate.data.length == 0){
-      throw new Error ("id of the language received not exist")
-    }
-
-    const clientToUpdate = await clientDao.getClientDAO({_id:client})
-
-    if(clientToUpdate.data.length == 0){
-      throw new Error ("id of the client received not exist")
-    }
-
-    const roleToUpdate = await roleDao.getRoleDAO({_id:role})
-
-    if(roleToUpdate.data.length == 0){
-      throw new Error ("id of the role received not exist")
-    }
-
-
-
-
-      const data = await updateUserDTO(name, email,phonenumber,isactive,isverified, language,client,role)
+    
+      const data = await updateUserDTO(name, email,phonenumber, posts)
       
-
-      const result = await userDAO.updateUserDAO(idToUpdate, user, data); 
+      const result = await userDAO.updateUserDAO(idToUpdate, data); 
 
     response.success(req, res, result, 201, "User updated successfully");
   } catch (error) {
