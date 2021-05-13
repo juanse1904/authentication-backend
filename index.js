@@ -12,7 +12,7 @@ const postDAO = require("./infraestructure/dao/postsDao")
 
 //invoke routes
 const userRoutes = require('./routes/UserRoutes')
-const postsRoutes = require('./routes/')
+const postsRoutes = require('./routes/PostsRoutes')
  
 
 

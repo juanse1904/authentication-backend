@@ -1,34 +1,33 @@
-const response = require("./responses/responses");
+const response = require("./responses/respones");
 const { ObjectId } = require("mongodb");
 
 const postDAO = require("../infraestructure/dao/postsDao");
-const createUserDTO = require("../infraestructure/Models/adUser/adUserDTO");
-const updateUserDTO = require("../infraestructure/Models/adUser/updateUserDTO"); 
-const getUserDTO = require("../infraestructure/Models/adUser/getUserDTO"); 
+const userDAO = require("../infraestructure/dao/userDao");
+const createPostDTO = require("../infraestructure/Models/adUser/adPostDTO");
+const getPostDTO = require("../infraestructure/Models/adUser/getUserDTO"); 
 
 /**
  * create posts
  * @param {Object} req 
  */
 
-exports.createUserLocal = async (req, session, transaction) => {
+exports.createPostLocal = async (req, session, transaction) => {
   try {
-    const name = req.name;
-    const email = req.email;
-    const password = req.password;
-    const bio = req.bio;
-    const posts=req.posts
-    
+    const content = req.content;
+    const link = req.link;
+    const user= req._iduser;
 
-    const exist = await userDAO.getUserDAO({email:email})
+    user=ObjectId(user);
 
-    if(exist.data.length>0){
-      throw new Error (`the email ${email} is already in use`)
+    const exist = await userDAO.getUserDAO({_id:user})
+
+    if(exist.data.length==0){
+      throw new Error (`the user does not exist`)
     }
    
-    const data = await createUserDTO(name,email,password, bio, posts)
+    const data = await createPostDTO(content,link,user)
     
-    return  await userDAO.createNewUserDAO(data, session);
+    return  await postDAO.createNewUserDAO(data, session);
 
   } catch (error) {
     throw error
@@ -41,10 +40,10 @@ exports.createUserLocal = async (req, session, transaction) => {
  * @param {*} res 
  * @param {*} next 
  */
-exports.createUser = async (req, res , next) => {
+exports.createPost = async (req, res , next) => {
   try {
 
-    const result = await this.createUserLocal(req.body)
+    const result = await this.createPostLocal(req.body)
 
     response.success(req, res, result, 201, `user ${req.body.name} created successfully`);
   } catch (error) {
