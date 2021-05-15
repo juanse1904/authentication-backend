@@ -33,7 +33,7 @@ exports.injectdb = async (conn) => {
  * @return {Object} 
  */ 
 
-exports.createNewDocument = async (collectionName, data, user, session) => {
+exports.createNewDocument = async (collectionName, data, session) => {
   try {
     let status = false;
   
@@ -54,7 +54,7 @@ exports.createNewDocument = async (collectionName, data, user, session) => {
     }else{
       //insert changeLog register
       const insertedID = resultInsert.insertedId;
-      await changeLogController.createADChangeLog("INSERT", collectionName, insertedID, null, null, user );
+      await changeLogController.createADChangeLog("INSERT", collectionName, insertedID, null, null);
       status=true;
       return [{
         status: status,

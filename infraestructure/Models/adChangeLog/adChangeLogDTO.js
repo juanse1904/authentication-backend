@@ -38,7 +38,7 @@ const adChangeLogDTO = (
             recordid:recordID,
             olddocument:oldDocument,
             newdocument:newDocument,
-            user,
+     
         };
     }
 
@@ -47,7 +47,7 @@ const adChangeLogDTO = (
         type,
         collection,
         recordid:recordID,
-        user,
+ 
     };
 };
 module.exports = adChangeLogDTO;

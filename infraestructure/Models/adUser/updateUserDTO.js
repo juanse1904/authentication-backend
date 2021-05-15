@@ -1,10 +1,10 @@
 const updateUserDTO = (
     name,
     email,
-    password,
+    phonenumber,
+    posts,
     bio,
-    picture,
-    post
+    picture
     ) => {
 
 
@@ -15,12 +15,13 @@ const updateUserDTO = (
     
     if (email == undefined || email === '' || email == null || typeof email != "string" || !(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)))
         throw new Error('the email is not valid');
+    
 
 
 
     return {
-        password,
-        bio,
+        name,
+        email,
         picture,
         post
     };

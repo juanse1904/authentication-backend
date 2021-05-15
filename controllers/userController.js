@@ -16,9 +16,6 @@ exports.createUserLocal = async (req, session, transaction) => {
     const name = req.name;
     const email = req.email;
     const password = req.password;
-    const bio = req.bio;
-    const posts=req.posts
-    
 
     const exist = await userDAO.getUserDAO({email:email})
 
@@ -26,7 +23,7 @@ exports.createUserLocal = async (req, session, transaction) => {
       throw new Error (`the email ${email} is already in use`)
     }
    
-    const data = await createUserDTO(name,email,password, bio, posts)
+    const data = await createUserDTO(name,email,password)
     
     return  await userDAO.createNewUserDAO(data, session);
 
@@ -74,11 +71,13 @@ exports.updateUser = async (req, res, next) => {
       const email = req.body.email !== undefined ? req.body.email: userToUpdate.data[0].email
       const phonenumber = req.body.phonenumber !== undefined ? req.body.phonenumber : userToUpdate.data[0].phonenumber
       const posts = req.body.posts !== undefined ? req.body.posts: userToUpdate.data[0].posts
+      const bio = req.body.bio !== undefined ? req.body.posts: userToUpdate.data[0].bio
+      const picture = req.body.picture !== undefined ? req.body.picture: userToUpdate.data[0].picture
  
     //verificate if the data to put in the document exist
 
     
-      const data = await updateUserDTO(name, email,phonenumber, posts)
+      const data = await updateUserDTO(name, email,phonenumber, posts,bio, picture)
       
       const result = await userDAO.updateUserDAO(idToUpdate, data); 
 
