@@ -6,7 +6,7 @@ const router = express.Router();
 router.post("/admin/posts", postController.createPost);
 
 //GET /admin/posts - get posts Record
-router.get("/admin/posts", postController.getPosts);
+router.get("/admin/posts", postController.getPost);
 
 //DELETE /admin/posts - get posts Record
 router.delete("/admin/posts", postController.deletePost);

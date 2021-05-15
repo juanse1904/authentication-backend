@@ -1,5 +1,3 @@
-const { ObjectId } = require("mongodb");
-
 const updateUserDTO = (
     name,
     email,

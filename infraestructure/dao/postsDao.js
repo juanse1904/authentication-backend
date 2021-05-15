@@ -18,7 +18,7 @@ exports.injectdb = async (conn) => {
   }
 }
 
-  exports.createNewUserDAO = async (record, user, session) => {
+  exports.createNewPostDAO = async (record, user, session) => {
     try {
      
       const result =  await commands.createNewDocument(COLLECTION_NAME_DAO, record, user, session)
@@ -29,10 +29,10 @@ exports.injectdb = async (conn) => {
     }
   }
 
-  exports.deleteUserDAO = async(idToDelete, user) => {
+  exports.deletePostDAO = async(idToDelete) => {
     try {
 
-      return await commands.deleteDocument(COLLECTION_NAME_DAO, idToDelete, user)
+      return await commands.deleteDocument(COLLECTION_NAME_DAO, idToDelete)
     } catch (error) {
       throw new Error(error)
     }
@@ -40,7 +40,7 @@ exports.injectdb = async (conn) => {
 
 
 
-  exports.getUserDAO = async (filter) => {
+  exports.getPostDAO = async (filter) => {
     try {
 
       return await commands.getDocument(COLLECTION_NAME_DAO,filter)
@@ -49,13 +49,3 @@ exports.injectdb = async (conn) => {
     }
   }
 
-  exports.updateUserDAO = async (idToUpdate,user, data) => {
-    try {
-
-      return await commands.updateDocument(COLLECTION_NAME_DAO,idToUpdate,user, data)
-    } catch (error) {
-      throw new Error(error)
-    }
-
-
-  }

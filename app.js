@@ -8,6 +8,7 @@ const { MongoClient } = require("mongodb");
 const changeLogDao = require("./infraestructure/dao/changelogDao")
 const userDAO = require("./infraestructure/dao/userDao")
 const postDAO = require("./infraestructure/dao/postsDao")
+const commands = require('./infraestructure/commands/commands')
 
 
 //invoke routes
@@ -33,9 +34,10 @@ MongoClient.connect(
 })
 .then(async client => {
     await changeLogDao.injectdb(client);
+    await commands.injectdb(client);
     await userDAO.injectdb(client);
-    /* await postDAO.injectdb(client);
-     */
+    await postDAO.injectdb(client);
+    
   
     console.log("connected")
     app.listen( process.env.PORT || 8080, () =>{
@@ -53,7 +55,7 @@ app.use((req, res, next) => {
     );
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
-  });
+});
 
   app.get("/", (request, response) => {
   response.json({ info: "Stam Suite Administration Module service is running..." });

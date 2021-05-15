@@ -16,7 +16,7 @@ const createUserDTO = (
 
     
     if (password == undefined || password === '' || password == null)
-        throw new Error('the value of isactive is not valid');
+        throw new Error('the value of password is not valid');
 
     
 
