@@ -71,14 +71,13 @@ exports.updateUser = async (req, res, next) => {
       const email = req.body.email !== undefined ? req.body.email: userToUpdate.data[0].email
       const phonenumber = req.body.phonenumber !== undefined ? req.body.phonenumber : userToUpdate.data[0].phonenumber
       const posts = req.body.posts !== undefined ? req.body.posts: userToUpdate.data[0].posts
-      const bio = req.body.bio !== undefined ? req.body.posts: userToUpdate.data[0].bio
+      const bio = req.body.bio !== undefined ? req.body.bio: userToUpdate.data[0].bio
       const picture = req.body.picture !== undefined ? req.body.picture: userToUpdate.data[0].picture
  
     //verificate if the data to put in the document exist
 
-    
+   
       const data = await updateUserDTO(name, email,phonenumber, posts,bio, picture)
-      
       const result = await userDAO.updateUserDAO(idToUpdate, data); 
 
     response.success(req, res, result, 201, "User updated successfully");

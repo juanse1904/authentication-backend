@@ -22,8 +22,10 @@ const updateUserDTO = (
     return {
         name,
         email,
-        picture,
-        post
+        ...(picture?{picture}:{}),
+        ...(bio?{bio}:{}),
+        ...(phonenumber?{phonenumber}:{}),
+        ...(posts?{posts}:{}),
     };
 }
 

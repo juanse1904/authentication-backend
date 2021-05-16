@@ -76,7 +76,7 @@ exports.createNewDocument = async (collectionName, data, session) => {
  * @param {Object} projection
  * @return {Object} 
  */
-exports.updateDocument = async (collectionName, idToUpdate, user, data, projection) => {
+exports.updateDocument = async (collectionName, idToUpdate, data, projection) => {
     try {
 
       let status = false
@@ -106,7 +106,7 @@ exports.updateDocument = async (collectionName, idToUpdate, user, data, projecti
 
       }else{
         //insert changeLog register
-        await changeLogController.createADChangeLog("UPDATE", collectionName, idToUpdate, resultUpdate.value , data , user );
+        await changeLogController.createADChangeLog("UPDATE", collectionName, idToUpdate, resultUpdate.value , data);
         status=true;
         return [{
           status: status,

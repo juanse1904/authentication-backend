@@ -49,10 +49,10 @@ exports.injectdb = async (conn) => {
     }
   }
 
-  exports.updateUserDAO = async (idToUpdate,user, data) => {
+  exports.updateUserDAO = async (idToUpdate, data) => {
     try {
 
-      return await commands.updateDocument(COLLECTION_NAME_DAO,idToUpdate,user, data)
+      return await commands.updateDocument(COLLECTION_NAME_DAO,idToUpdate, data)
     } catch (error) {
       throw new Error(error)
     }
