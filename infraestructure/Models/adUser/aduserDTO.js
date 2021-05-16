@@ -1,11 +1,12 @@
+const bcrypt = require('bcrypt')
 
-const createUserDTO = (
+const createUserDTO = async(
     name,
     email,
     password,
     ) => {
 
-
+let encryptpassword=""
     
     if (name == undefined || name === '' || name == null || typeof name != "string")
         throw new Error('name is not valid');
@@ -17,13 +18,18 @@ const createUserDTO = (
     
     if (password == undefined || password === '' || password == null)
         throw new Error('the value of password is not valid');
-
     
+    
+console.log("before hashed", encryptpassword)
+        
+encryptpassword= await bcrypt.hash(password,10);
+       
+console.log("after hashed", encryptpassword)
 
     return {
         name,
         email,
-        password
+        password: encryptpassword
     };
 }
 
