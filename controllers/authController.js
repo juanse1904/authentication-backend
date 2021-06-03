@@ -1,4 +1,3 @@
-const response = require("./responses/respones");
 const boom = require('@hapi/boom');
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
@@ -6,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const apiKeyDAO = require("../infraestructure/dao/apiKeyDao"); 
 
 //Basic strategy
-
+require('../utils/auth/strategies/basic')
 /**
  * get api-keys
  * @param {} req 
@@ -15,39 +14,50 @@ const apiKeyDAO = require("../infraestructure/dao/apiKeyDao");
  */
  exports.postApiKey = async (req, res , next) => {
 
-  try {
 
-    const apiKeyToken = req.body.apiKeyToken
+        const apiKeyToken = req.body.apiKeyToken
 
-    if(! apiKeyToken){
-        next(boom.unauthorized('apiKeyToekn is required'))
-    }
-
-    passport.authenticate('basic', function(error,user){
-        try{
-            if(error|| !user){
-               next(boom.unauthorized()) 
-            }
-            req.login(user, {session:false},async function(error){
-                if (error){
-                    next(error)
-                }
-
-                const apiKey= await apiKeyDAO.getApiKeyDAO({token: apiKeyToken})
-            })
-        }catch{
-         next(error)
+        if(! apiKeyToken){
+            next(boom.unauthorized('apiKeyToekn is required'))
         }
-    })(req,res,next);
-      const result =  await apiKeyDAO.getapiKeyDAO({token:req.query.token})
-        
-      if (!result){
-          throw new Error("can no check the token") 
-      }
-  
-    response.success(req, res, result, 200, "OK");
-  } catch (error) {
-      response.error(req, res, "token not read!", 400, error.message);
-  }
+        passport.authenticate('basic', function(error,user){
+            try{
+                if(error|| !user){
+ 
+                    next(boom.unauthorized()) 
+                }
+   
+                req.login(user, {session:false}, async function(error){
+
+                    if (error){
+                       next(error)
+                    }
+                    const apiKey= await apiKeyDAO.getApiKeyDAO({token: apiKeyToken})
+
+    
+                    if(!apiKey){
+                      next(boom.unauthorized());  
+                    }
+                   
+                    const {_id: id, name, email}=user;
+    
+                    const payload = {
+                     sub:id,
+                     name,
+                     email,
+                     scopes: apiKey.scopes
+                    }
+    
+                 const token = jwt.sign(payload, process.env.AUTH_JWT_SECRET,{
+                     expiresIn: '10m'
+                 });
+    
+                 return res.status(200).json({token, user: {id,name, email}})
+                })
+            }catch{
+    
+             next(error)
+            }
+        })(req,res,next)
 
 }

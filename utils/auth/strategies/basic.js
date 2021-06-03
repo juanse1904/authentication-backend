@@ -4,17 +4,22 @@ const boom = require('@hapi/boom')
 const bcrypt = require('bcrypt')
 
 
-const userController = require('../../../controllers/userController');
+const userDAO = require('../../../infraestructure/dao/userDao');
 
 
-passport.use(new BasicStrategy(async function(email,password,cb){
+passport.use(
+    new BasicStrategy(async function(email,password,cb){
    try{
-       const user = await userController.getUser({email})
-       
-       if(user.data.length==0){
+       console.log("this is the email by param of the function", email)
+       const user = await (await userDAO.getUserDAO({email})).data[0]
+
+ console.log("the user on the srategy", user)
+       if(!user){
+        console.log("there is a problem with the user", email)
            return cb(boom.unauthorized(), false);
        }
-       if(!(await bcrypt.compare(password,user.data.password))){
+       if(!(await bcrypt.compare(password,user.password))){
+        console.log("there is a error with the password")
            return cb(boom.unauthorized(), false)
        }
     delete user.password;
@@ -26,4 +31,5 @@ passport.use(new BasicStrategy(async function(email,password,cb){
     return cb(error)
     
    }
-}))
+})
+);

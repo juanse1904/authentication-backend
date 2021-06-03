@@ -8,13 +8,14 @@ const { MongoClient } = require("mongodb");
 const changeLogDao = require("./infraestructure/dao/changelogDao")
 const userDAO = require("./infraestructure/dao/userDao")
 const postDAO = require("./infraestructure/dao/postsDao")
+const apiKeyDAO = require("./infraestructure/dao/apiKeyDao")
 const commands = require('./infraestructure/commands/commands')
 
 
 //invoke routes
 const userRoutes = require('./routes/UserRoutes')
 const postsRoutes = require('./routes/PostsRoutes')
- 
+const authRoutes= require('./routes/authRoutes')
 
 
 if (process.env.NODE_ENV !== "production"){
@@ -37,6 +38,7 @@ MongoClient.connect(
     await commands.injectdb(client);
     await userDAO.injectdb(client);
     await postDAO.injectdb(client);
+    await apiKeyDAO.injectdb(client);
     
   
     console.log("connected")
@@ -58,12 +60,13 @@ app.use((req, res, next) => {
 });
 
   app.get("/", (request, response) => {
-  response.json({ info: "Stam Suite Administration Module service is running..." });
+  response.json({ info: "Authentication JSG app service is running..." });
   });
 
   //Routes app.use 
   app.use(userRoutes);
   app.use(postsRoutes);
+  app.use(authRoutes)
 
   app.use(function (req, res, next) {
     res.status(404).send("Sorry, can't find that!");
